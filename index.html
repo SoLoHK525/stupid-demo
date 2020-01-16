@@ -1,0 +1,154 @@
+<html>
+    <head>
+        <style>
+            .slot {
+                display: flex;
+                max-height: 150px;
+                width: 300px;
+                min-height: 125px;
+                box-shadow: rgba(0, 0, 0, 0.5) 0px 0px 15px 5px;
+            }
+            .slot>.char {
+                position: absolute;
+                max-width: 300px;
+                max-height: 125px;
+                overflow:hidden;
+                -webkit-perspective: 1000;
+                z-index: -1;
+            }
+            
+            .slot>.char>img {
+                max-width: 300px;
+            }
+            
+            .trans-enter-active {
+                transition: all .5s;
+                animation: slide-in-bck-center 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+            }
+            
+            .trans-leave-active {
+                transition: all .5s;
+                animation: animation: slide-out-bck-center 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+            }
+            
+            .spelltrans-enter-active {
+                animation: puff-in-center 0.5s cubic-bezier(0.770, 0.000, 0.175, 1.000) both;
+            }
+
+            .spelltrans-leave-active {
+                animation: puff-in-center 0.5s cubic-bezier(0.770, 0.000, 0.175, 1.000) both reverse;
+            }     
+            
+            @keyframes puff-in-center {
+              0% {
+                -webkit-transform: scale(2);
+                        transform: scale(2);
+                -webkit-filter: blur(4px);
+                        filter: blur(4px);
+                opacity: 0;
+              }
+              100% {
+                -webkit-transform: scale(1);
+                        transform: scale(1);
+                -webkit-filter: blur(0px);
+                        filter: blur(0px);
+                opacity: 1;
+              }
+            }
+            
+            @keyframes slide-out-bck-center {
+              0% {
+                -webkit-transform: translateZ(0);
+                        transform: translateZ(0);
+                opacity: 1;
+              }
+              100% {
+                -webkit-transform: translateZ(-300px);
+                        transform: translateZ(-300px);
+                opacity: 0;
+              }
+            }
+            
+            @keyframes slide-in-bck-center {
+              0% {
+                -webkit-transform: translateZ(300px);
+                transform: translateZ(300px) translateY(-25px);
+                filter: grayscale(1);
+                opacity: 0;
+              }
+              100% {
+                -webkit-transform: translateZ(0);
+                transform: translateZ(0);
+                filter: grayscale(0);
+                opacity: 1;
+              }
+            }
+
+            .spells {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+            
+            .spell {
+                margin: 5 5 5 5;
+                box-shadow: 0px 0px 0px 1.5px rgba(0, 251, 255, 0.8);
+            }
+            
+            .spells>.spell>img {
+                height: 50px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app">
+            <div class="slot">
+                <div class="char">
+                    <transition name="trans" mode="out-in">
+                        <img v-if="char" src="https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Caitlyn_0.jpg" key="1" />
+                        <img v-else src="https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Ashe_0.jpg" key="2" />
+                    </transition>
+                </div>
+                <div class="spells">
+                    <div class="spell">
+                        <transition name="spelltrans" mode="out-in">
+                            <img v-if="char" :src="spell.heal" key="1">
+                            <img v-else :src="spell.flash" key="2">
+                        </transition>
+                    </div>
+                    <div class="spell">
+                        <transition name="spelltrans" mode="out-in">
+                            <img v-if="char" :src="spell.heal" key="1">
+                            <img v-else :src="spell.flash" key="2">
+                        </transition>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script>
+            let chars = [
+                "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Caitlyn_0.jpg",
+                "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Ashe_0.jpg"
+            ]
+            let App = new Vue({
+                el: "#app",
+                data: function(){
+                    return {
+                        char: false,
+                        spell: {
+                            "flash": "https://ddragon.leagueoflegends.com/cdn/10.1.1/img/spell/SummonerFlash.png",
+                            "heal": "https://ddragon.leagueoflegends.com/cdn/10.1.1/img/spell/SummonerHeal.png"
+                        }
+                    }
+                },
+                mounted: function(){
+                    let vm = this;
+                    setInterval(()=>{
+                        vm.char = !vm.char;
+                    }, 4000);
+                }
+            });
+        </script>
+    </body>
+</html>
